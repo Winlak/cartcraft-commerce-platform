@@ -1,0 +1,246 @@
+.search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.search input {
+  border: 0;
+  outline: 0;
+  min-width: 0;
+  flex: 1;
+  background: transparent;
+  font-size: 14px;
+}
+.catalog-tools {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: -8px 0 25px;
+  color: var(--muted);
+  font-size: 13px;
+}
+.catalog-tools label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  padding: 0 12px;
+  height: 40px;
+}
+.catalog-tools input {
+  border: 0;
+  outline: 0;
+  background: transparent;
+}
+.about {
+  padding: 82px 0;
+  background: #1b1b1a;
+  color: #fff;
+}
+.about-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+}
+.about h2 {
+  font-size: 45px;
+  margin: 0;
+  max-width: 520px;
+}
+.about p {
+  font-size: 18px;
+  line-height: 1.6;
+  color: #d2d0cc;
+}
+.text-link {
+  display: inline-flex;
+  gap: 7px;
+  align-items: center;
+  color: var(--accent);
+  font-size: 14px;
+}
+.product-page {
+  padding: 40px 32px 86px;
+}
+.back-link {
+  display: inline-flex;
+  gap: 7px;
+  align-items: center;
+  font-size: 14px;
+  margin-bottom: 30px;
+}
+.product-detail {
+  display: grid;
+  grid-template-columns: 1fr 0.8fr;
+  gap: 70px;
+  align-items: flex-start;
+}
+.product-detail-image {
+  background: #eeeae3;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.product-detail-image img {
+  width: 100%;
+  display: block;
+}
+.product-detail-copy {
+  padding-top: 35px;
+}
+.product-detail-copy h1 {
+  font-size: 58px;
+  line-height: 1;
+  margin: 8px 0 16px;
+}
+.detail-price {
+  font-size: 26px;
+  font-weight: 600;
+  margin: 0 0 30px;
+}
+.detail-description {
+  color: var(--muted);
+  line-height: 1.65;
+  max-width: 430px;
+}
+.stock {
+  color: var(--success);
+  font-size: 14px;
+  margin: 25px 0;
+}
+.stock.low {
+  color: var(--accent);
+}
+.product-detail-copy .button {
+  display: inline-flex;
+  gap: 9px;
+  align-items: center;
+}
+.product-detail-copy dl {
+  border-top: 1px solid var(--line);
+  margin-top: 40px;
+  padding-top: 17px;
+  max-width: 440px;
+}
+.product-detail-copy dl div {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  padding: 7px 0;
+}
+.product-detail-copy dt {
+  color: var(--muted);
+}
+.product-detail-copy dd {
+  margin: 0;
+}
+.name-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 13px;
+}
+.form-submit {
+  width: 100%;
+  margin-top: 8px;
+}
+.auth-switch,
+.demo-note {
+  font-size: 14px !important;
+  margin-top: 22px;
+}
+.demo-note {
+  font-size: 12px !important;
+}
+.add-address {
+  margin-top: 14px;
+  width: 100%;
+  padding: 13px;
+  background: #fff;
+  border: 1px dashed #bbb4ac;
+  color: var(--accent);
+  border-radius: 8px;
+}
+.address-form {
+  margin-top: 14px;
+}
+.success-message {
+  background: #edf5ed;
+  color: #33683f;
+  padding: 13px;
+  border-radius: 9px;
+  margin: -13px 0 20px;
+  font-size: 14px;
+}
+.text-button {
+  border: 0;
+  background: transparent;
+  padding: 12px;
+  font-size: 14px;
+  color: var(--muted);
+  text-align: left;
+}
+.address-section {
+  margin-top: 50px;
+  border-top: 1px solid var(--line);
+  padding-top: 24px;
+}
+.address-section h2 {
+  font-size: 32px;
+  margin: 0;
+}
+.address-section p {
+  color: var(--muted);
+}
+.admin-side nav a {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.admin-logout {
+  margin-top: auto;
+  border: 0;
+  background: transparent;
+  color: #ddd;
+  text-align: left;
+  padding: 12px 14px;
+}
+.admin-header p {
+  color: var(--muted);
+  margin: -20px 0 0;
+}
+.admin-order .status {
+  border: 0;
+  margin-top: 4px;
+  cursor: pointer;
+}
+@media (max-width: 900px) {
+  .about-inner,
+  .product-detail {
+    grid-template-columns: 1fr;
+  }
+  .about {
+    padding: 56px 0;
+  }
+  .about-inner {
+    gap: 25px;
+  }
+  .about h2 {
+    font-size: 39px;
+  }
+  .product-page {
+    padding: 28px 18px 60px;
+  }
+  .product-detail-copy {
+    padding-top: 0;
+  }
+  .product-detail-copy h1 {
+    font-size: 43px;
+  }
+  .catalog-tools {
+    margin-top: 20px;
+  }
+  .name-grid {
+    grid-template-columns: 1fr;
+  }
+}
