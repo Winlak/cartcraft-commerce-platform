@@ -1,17 +1,19 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { ShoppingBag } from "lucide-react";
 import { Product } from "@/lib/types";
 import { formatMoney } from "@/lib/format";
 import { useCart } from "./cart-provider";
 export function ProductCard({ product }: { product: Product }) {
   const { addItem } = useCart();
+  const router = useRouter();
   async function add() {
     try {
       await addItem(product.id);
     } catch {
-      window.location.href = `/login?next=/products/${product.slug}`;
+      router.push(`/login?next=/products/${product.slug}`);
     }
   }
   return (

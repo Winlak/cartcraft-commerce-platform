@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowLeft, ShoppingBag } from "lucide-react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { api } from "@/lib/api";
 import { Product } from "@/lib/types";
 import { formatMoney } from "@/lib/format";
@@ -11,6 +11,7 @@ import { Header } from "@/components/header";
 import { useCart } from "@/components/cart-provider";
 export default function ProductPage() {
   const params = useParams<{ slug: string }>();
+  const router = useRouter();
   const [product, setProduct] = useState<Product | null>(null);
   const [error, setError] = useState("");
   const { addItem } = useCart();
@@ -25,7 +26,7 @@ export default function ProductPage() {
     try {
       await addItem(product.id);
     } catch {
-      window.location.href = `/login?next=/products/${product.slug}`;
+      router.push(`/login?next=/products/${product.slug}`);
     }
   }
   return (

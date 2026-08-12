@@ -6,6 +6,7 @@ import {
   useEffect,
   useMemo,
   useState,
+  useSyncExternalStore,
 } from "react";
 import { api } from "@/lib/api";
 import { Cart, Session } from "@/lib/types";
@@ -13,7 +14,6 @@ import { Cart, Session } from "@/lib/types";
 interface CartContextValue {
   cart: Cart | null;
   session: Session | null;
-  loading: boolean;
   isDrawerOpen: boolean;
   setDrawerOpen: (value: boolean) => void;
   login: (session: Session) => void;
@@ -25,11 +25,58 @@ interface CartContextValue {
 }
 const CartContext = createContext<CartContextValue | null>(null);
 const SESSION_KEY = "cartcraft.session.v1";
+const SESSION_EVENT = "cartcraft:session-change";
+
+let cachedSessionValue: string | null | undefined;
+let cachedSession: Session | null = null;
+
+function getClientSession() {
+  const value = localStorage.getItem(SESSION_KEY);
+  if (value === cachedSessionValue) return cachedSession;
+
+  cachedSessionValue = value;
+  try {
+    cachedSession = value ? (JSON.parse(value) as Session) : null;
+  } catch {
+    cachedSession = null;
+  }
+  return cachedSession;
+}
+
+function getServerSession() {
+  return null;
+}
+
+function subscribeToSession(onStoreChange: () => void) {
+  window.addEventListener("storage", onStoreChange);
+  window.addEventListener(SESSION_EVENT, onStoreChange);
+  return () => {
+    window.removeEventListener("storage", onStoreChange);
+    window.removeEventListener(SESSION_EVENT, onStoreChange);
+  };
+}
+
+function persistSession(next: Session | null) {
+  if (next) {
+    const value = JSON.stringify(next);
+    cachedSessionValue = value;
+    cachedSession = next;
+    localStorage.setItem(SESSION_KEY, value);
+  } else {
+    cachedSessionValue = null;
+    cachedSession = null;
+    localStorage.removeItem(SESSION_KEY);
+  }
+  window.dispatchEvent(new Event(SESSION_EVENT));
+}
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
-  const [session, setSession] = useState<Session | null>(null);
+  const session = useSyncExternalStore(
+    subscribeToSession,
+    getClientSession,
+    getServerSession,
+  );
   const [cart, setCart] = useState<Cart | null>(null);
-  const [loading, setLoading] = useState(true);
   const [isDrawerOpen, setDrawerOpen] = useState(false);
   const refreshCart = useCallback(async () => {
     if (!session) {
@@ -38,25 +85,36 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
     setCart(await api.cart(session.accessToken));
   }, [session]);
+
   useEffect(() => {
-    const raw = localStorage.getItem(SESSION_KEY);
-    if (raw) setSession(JSON.parse(raw) as Session);
-    setLoading(false);
-  }, []);
-  useEffect(() => {
-    if (session)
-      void refreshCart().catch(() => {
-        localStorage.removeItem(SESSION_KEY);
-        setSession(null);
-      });
-  }, [session, refreshCart]);
+    if (!session) return;
+
+    const { accessToken } = session;
+    let cancelled = false;
+    async function loadCart() {
+      try {
+        const nextCart = await api.cart(accessToken);
+        if (!cancelled) setCart(nextCart);
+      } catch {
+        if (!cancelled) {
+          setCart(null);
+          persistSession(null);
+        }
+      }
+    }
+    void loadCart();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [session]);
+
   const login = useCallback((next: Session) => {
-    localStorage.setItem(SESSION_KEY, JSON.stringify(next));
-    setSession(next);
+    setCart(null);
+    persistSession(next);
   }, []);
   const logout = useCallback(() => {
-    localStorage.removeItem(SESSION_KEY);
-    setSession(null);
+    persistSession(null);
     setCart(null);
     setDrawerOpen(false);
   }, []);
@@ -85,9 +143,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   );
   const value = useMemo(
     () => ({
-      cart,
+      cart: session ? cart : null,
       session,
-      loading,
       isDrawerOpen,
       setDrawerOpen,
       login,
@@ -100,7 +157,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     [
       cart,
       session,
-      loading,
       isDrawerOpen,
       login,
       logout,
