@@ -88,7 +88,7 @@ npm run build
 npm audit --omit=dev --audit-level=high
 ```
 
-Unit-тесты покрывают разрешённые переходы state machine, возврат остатков при отмене и отказ conditional stock reservation. Есть тест web-format helpers. GitHub Actions выполняет генерацию Prisma-клиента, lint, typecheck, tests и production build на push/PR в `main`.
+Unit-тесты покрывают разрешённые переходы state machine, возврат остатков при отмене и отказ conditional stock reservation. Есть тест web-format helpers. GitHub Actions выполняет audit runtime-зависимостей, генерацию Prisma-клиента, lint, typecheck, tests и production build на push/PR в `main`.
 
 Проверка runtime-зависимостей выполняется командой `npm audit --omit=dev --audit-level=high`. Для транзитивной зависимости `@nestjs/swagger > js-yaml` в `package.json` явно зафиксирован безопасный патч `js-yaml` 5.2.3 через npm overrides: это сохраняет совместимость NestJS API и устраняет известную high severity advisory.
 

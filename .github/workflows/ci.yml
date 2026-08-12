@@ -16,6 +16,7 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - run: npm audit --omit=dev --audit-level=high
       - run: npm run db:generate
         env:
           DATABASE_URL: postgresql://cartcraft:cartcraft@localhost:5432/cartcraft?schema=public
