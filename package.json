@@ -1,0 +1,25 @@
+{
+  "name": "cartcraft-commerce-platform",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "concurrently -n api,web -c cyan,magenta \"npm run dev -w @cartcraft/api\" \"npm run dev -w @cartcraft/web\"",
+    "build": "npm run build -w @cartcraft/api && npm run build -w @cartcraft/web",
+    "lint": "npm run lint -w @cartcraft/api && npm run lint -w @cartcraft/web",
+    "typecheck": "npm run typecheck -w @cartcraft/api && npm run typecheck -w @cartcraft/web",
+    "test": "npm run test -w @cartcraft/api && npm run test -w @cartcraft/web",
+    "test:e2e": "npm run test:e2e -w @cartcraft/api",
+    "db:generate": "npm run prisma:generate -w @cartcraft/api",
+    "db:migrate": "npm run prisma:migrate -w @cartcraft/api",
+    "db:seed": "npm run prisma:seed -w @cartcraft/api"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  },
+  "engines": {
+    "node": ">=20.11"
+  }
+}
